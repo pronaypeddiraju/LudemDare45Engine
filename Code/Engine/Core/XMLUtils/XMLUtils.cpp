@@ -190,3 +190,40 @@ Vec3 ParseXmlAttribute(const XMLElement& xmlElement, const char* attributeName, 
 		return newVec3;
 	}
 }
+
+tinyxml2::XMLNode* ParseXMLDocumentForElement(tinyxml2::XMLElement& root, std::string sSearchString)
+{
+	//inspired by http://stackoverflow.com/questions/11921463/find-a-specific-node-in-a-xml-document-with-tinyxml
+	tinyxml2::XMLNode * xElem = root.FirstChild();
+	while (xElem)
+	{
+		if (xElem->Value() && !std::string(xElem->Value()).compare(sSearchString))
+		{
+			return xElem;
+		}
+
+		/*
+		*   We move through the XML tree following these rules (basically in-order tree walk):
+		*
+		*   (1) if there is one or more child element(s) visit the first one
+		*       else
+		*   (2)     if there is one or more next sibling element(s) visit the first one
+		*               else
+		*   (3)             move to the parent until there is one or more next sibling elements
+		*   (4)             if we reach the end break the loop
+		*/
+		if (xElem->FirstChildElement()) //(1)
+			xElem = xElem->FirstChildElement();
+		else if (xElem->NextSiblingElement())  //(2)
+			xElem = xElem->NextSiblingElement();
+		else
+		{
+			while (xElem->Parent() && !xElem->Parent()->NextSiblingElement()) //(3)
+				xElem = xElem->Parent();
+			if (xElem->Parent() && xElem->Parent()->NextSiblingElement())
+				xElem = xElem->Parent()->NextSiblingElement();
+			else //(4)
+				break;
+		}//else
+	}//while
+}

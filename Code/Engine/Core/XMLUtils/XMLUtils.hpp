@@ -3,6 +3,7 @@
 #include "Engine/Commons/EngineCommon.hpp"
 #include <ThirdParty/TinyXML2/tinyxml2.h>
 #include <string>
+#include <functional>
 
 //------------------------------------------------------------------------------------------------------------------------------
 typedef tinyxml2::XMLElement XMLElement;
@@ -28,3 +29,5 @@ IntRange						ParseXmlAttribute( const XMLElement& xmlElement, const char* attri
 FloatRange						ParseXmlAttribute( const XMLElement& xmlElement, const char* attributeName, const FloatRange& defaultValue );
 IntVec2							ParseXmlAttribute( const XMLElement& xmlElement, const char* attributeName, const IntVec2& defaultValue );
 uint							ParseXmlAttribute(const XMLElement& xmlElement, const char* attributeName, uint defaultValue);
+
+tinyxml2::XMLNode*				ParseXMLDocumentForElement(tinyxml2::XMLElement& root, std::string sSearchString);
